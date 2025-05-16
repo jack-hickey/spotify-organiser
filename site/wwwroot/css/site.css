@@ -2,6 +2,7 @@
 	--theme-colour-r: 29 !important;
 	--theme-colour-g: 185 !important;
 	--theme-colour-b: 84 !important;
+	--header-height: var(--block-size-xxxxl) !important;
 }
 
 .connect--box {
@@ -16,4 +17,9 @@
 	height: 80px;
 	width: 80px;
 	margin: auto;
+}
+
+chip-frameheader .profile-picture {
+	height: var(--block-size-standard);
+	width: var(--block-size-standard);
 }

@@ -1,9 +1,24 @@
-﻿<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+﻿@model site.Classes.SpotifyPageModel;
+
+@inject IHostEnvironment env;
+
+@using site.Classes;
+@using System.Text.Json;
+@using System.Net.Http.Headers;
+@using Microsoft.AspNetCore.Authentication;
+
+<!DOCTYPE html>
+<html
+	lang="en"
+	data-theme="dark"
+	data-server-path="@Url.GetTopLevel(Context)"
+	data-test-mode="@env.IsDevelopment()">
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Document</title>
+		<title>Spotify Organiser</title>
+
+		<link rel="icon" href="~/images/spotify.png" type="image/png" />
 
 		<script asp-asp-append-version="true" type="text/javascript" src="js/preload-handler.js"></script>
 		<link rel="stylesheet" href="css/auxilium.css" />
@@ -11,6 +26,39 @@
 	</head>
 	<body>
 		<chip-frame restrict-height>
+			<chip-frameheader>
+				<div class="h-align gap-md">
+					<img
+						height="24"
+						width="24"
+						src="~/images/spotify.png"
+						alt="Logo" />
+					<chip-header
+						size="2">
+						Spotify Organiser
+					</chip-header>
+				</div>
+
+				@if (!string.IsNullOrWhiteSpace(Model.User.ID))
+				{
+					string profilePicture = Model.User.Images.FirstOrDefault()?.URL ?? "";
+
+					<div class="ms-auto gap-sm h-align">
+						@if (!string.IsNullOrWhiteSpace(profilePicture))
+						{
+							<img
+								class="profile-picture"
+								src="@profilePicture"
+								alt="Avatar" />
+						}
+						<chip-header
+							size="4">
+							@Model.User.Name
+						</chip-header>
+					</div>
+				}
+			</chip-frameheader>
+
 			<chip-framecontent>@RenderBody()</chip-framecontent>
 		</chip-frame>
 

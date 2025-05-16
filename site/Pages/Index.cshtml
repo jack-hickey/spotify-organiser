@@ -1,7 +1,7 @@
 @page
 @model site.Pages.IndexModel
 
-@if (string.IsNullOrWhiteSpace(Model.Token))
+@if (string.IsNullOrWhiteSpace(Model.User.ID))
 {
 	<div class="connect--box">
 		<div class="d-flex flex-column">
@@ -23,5 +23,5 @@
 }
 else
 {
-	<div>Logged in!</div>
+
 }
