@@ -1,0 +1,19 @@
+:root {
+	--theme-colour-r: 29 !important;
+	--theme-colour-g: 185 !important;
+	--theme-colour-b: 84 !important;
+}
+
+.connect--box {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	text-align: center;
+}
+
+.connect--box img {
+	height: 80px;
+	width: 80px;
+	margin: auto;
+}
