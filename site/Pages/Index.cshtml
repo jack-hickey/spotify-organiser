@@ -1,20 +1,27 @@
 @page
-@model site.IndexModel
+@model site.Pages.IndexModel
 
-<div>ID: @Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_ID")</div>
-<div>Secret: @Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_SECRET")</div>
+@if (string.IsNullOrWhiteSpace(Model.Token))
+{
+	<div class="connect--box">
+		<div class="d-flex flex-column">
+			<img src="~/images/spotify.png" alt="Spotify Logo" />
 
-<chip-list class="mt-form--lg" gap="md">
-	@foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
-	{
-		<chip-listitem>
-			<chip-header
-				size="5">
-				@env.Key
-			</chip-header>
-			<div class="mt-xs">
-				@env.Value
-			</div>
-		</chip-listitem>
-	}
-</chip-list>
+			<chip-emptyprompt
+				class="mt-form--lg"
+				heading="Connect with Spotify">
+				Before you can use this service, you'll need to connect your spotify account below.
+			</chip-emptyprompt>
+
+			<chip-button
+				link="~/login"
+				class="mt-form mx-auto">
+				Connect
+			</chip-button>
+		</div>
+	</div>
+}
+else
+{
+	<div>Logged in!</div>
+}
