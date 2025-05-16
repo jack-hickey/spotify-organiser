@@ -1,4 +1,5 @@
 @page
 @model site.IndexModel
 
-Nice!
+<div>ID: @Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_ID")</div>
+<div>Secret: @Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_SECRET")</div>
