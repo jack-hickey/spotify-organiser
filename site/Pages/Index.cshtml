@@ -3,3 +3,18 @@
 
 <div>ID: @Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_ID")</div>
 <div>Secret: @Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_SECRET")</div>
+
+<chip-list class="mt-form--lg" gap="md">
+	@foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
+	{
+		<chip-listitem>
+			<chip-header
+				size="5">
+				@env.Key
+			</chip-header>
+			<div class="mt-xs">
+				@env.Value
+			</div>
+		</chip-listitem>
+	}
+</chip-list>
