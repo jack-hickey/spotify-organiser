@@ -1,8 +1,8 @@
-using Chipside.Razor.ViewModels;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace site
 {
-	public class IndexModel : ViewModelBase
+	public class IndexModel : PageModel
 	{
 
 	}
