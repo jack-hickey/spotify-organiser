@@ -18,3 +18,8 @@
 	width: 80px;
 	margin: auto;
 }
+
+chip-frameheader .profile-picture {
+	height: var(--block-size-standard);
+	width: var(--block-size-standard);
+}

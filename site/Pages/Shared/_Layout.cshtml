@@ -1,5 +1,11 @@
-﻿@inject IHostEnvironment env
-@using site.Classes
+﻿@model site.Classes.SpotifyPageModel;
+
+@inject IHostEnvironment env;
+
+@using site.Classes;
+@using System.Text.Json;
+@using System.Net.Http.Headers;
+@using Microsoft.AspNetCore.Authentication;
 
 <!DOCTYPE html>
 <html
@@ -32,6 +38,25 @@
 						Spotify Organiser
 					</chip-header>
 				</div>
+
+				@if (!string.IsNullOrWhiteSpace(Model.User.ID))
+				{
+					string profilePicture = Model.User.Images.FirstOrDefault()?.URL ?? "";
+
+					<div class="ms-auto gap-sm h-align">
+						@if (!string.IsNullOrWhiteSpace(profilePicture))
+						{
+							<img
+								class="profile-picture"
+								src="@profilePicture"
+								alt="Avatar" />
+						}
+						<chip-header
+							size="4">
+							@Model.User.Name
+						</chip-header>
+					</div>
+				}
 			</chip-frameheader>
 
 			<chip-framecontent>@RenderBody()</chip-framecontent>
