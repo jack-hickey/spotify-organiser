@@ -16,7 +16,7 @@ namespace site.Pages
 
 		public async Task<IActionResult> OnPostOrganise()
 		{
-			await (await GetClientAsync()).GetLikedSongsAsync();
+			Console.WriteLine((await (await GetClientAsync()).GetLikedSongsAsync()).Count());
 			return new OkResult();
 		}
 	}

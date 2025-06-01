@@ -9,6 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+string[] spotifyScopes = [
+	"user-library-read",
+	"playlist-read-private",
+	"user-read-private",
+	"playlist-modify-public",
+	"playlist-modify-private"
+];
+
 builder.Services.AddAuthentication(options =>
 {
 	options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -25,9 +33,10 @@ builder.Services.AddAuthentication(options =>
 	options.TokenEndpoint = "https://accounts.spotify.com/api/token";
 	options.UserInformationEndpoint = "https://api.spotify.com/v1/me";
 
-	options.Scope.Add("user-read-email");
-	options.Scope.Add("playlist-modify-public");
-	options.Scope.Add("playlist-modify-private");
+	foreach (string scope in spotifyScopes)
+	{
+		options.Scope.Add(scope);
+	}
 
 	options.SaveTokens = true;
 	options.ClaimActions.MapJsonKey(ClaimTypes.Name, "display_name");
@@ -47,7 +56,6 @@ builder.Services.AddAuthentication(options =>
 
 			JsonDocument user = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
 			context.RunClaimActions(user.RootElement);
-
 		}
 	};
 });
