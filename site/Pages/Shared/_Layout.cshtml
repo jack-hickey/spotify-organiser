@@ -39,9 +39,9 @@
 					</chip-header>
 				</div>
 
-				@if (!string.IsNullOrWhiteSpace(Model.User.ID))
+				@if (!string.IsNullOrWhiteSpace(Model.SpotifyUser.ID))
 				{
-					string profilePicture = Model.User.Images.FirstOrDefault()?.URL ?? "";
+					string profilePicture = Model.SpotifyUser.Images.FirstOrDefault()?.URL ?? "";
 
 					<div class="ms-auto gap-sm h-align">
 						@if (!string.IsNullOrWhiteSpace(profilePicture))
@@ -53,7 +53,7 @@
 						}
 						<chip-header
 							size="4">
-							@Model.User.Name
+							@Model.SpotifyUser.Name
 						</chip-header>
 					</div>
 				}

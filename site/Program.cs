@@ -30,23 +30,24 @@ builder.Services.AddAuthentication(options =>
 	options.Scope.Add("playlist-modify-private");
 
 	options.SaveTokens = true;
-
-	options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
 	options.ClaimActions.MapJsonKey(ClaimTypes.Name, "display_name");
-	options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
 
 	options.Events = new OAuthEvents
 	{
 		OnCreatingTicket = async context =>
 		{
-			var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
+			HttpRequestMessage request = new(HttpMethod.Get, context.Options.UserInformationEndpoint);
 			request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
 
-			var response = await context.Backchannel.SendAsync(request);
+			HttpResponseMessage response = await context.Backchannel.SendAsync(request);
 			response.EnsureSuccessStatusCode();
 
-			var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+			string stringResponse = await response.Content.ReadAsStringAsync();
+			context.Identity?.AddClaim(new Claim("spotify_user", stringResponse));
+
+			JsonDocument user = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
 			context.RunClaimActions(user.RootElement);
+
 		}
 	};
 });

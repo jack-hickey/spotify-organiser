@@ -1,37 +1,25 @@
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using site.Spotify;
 
 namespace site.Classes
 {
 	public class SpotifyPageModel : PageModel
 	{
-		public new User User { get; set; } = new();
+		private User? spotifyUser = null;
 
-		public async Task<IActionResult> OnGetAsync()
-		{
-			string token = await HttpContext.GetTokenAsync("access_token") ?? "";
+		public User SpotifyUser => spotifyUser ??= (JsonSerializer.Deserialize<User>(User.FindFirstValue("spotify_user") ?? "{}") ?? new());
 
-			if (!string.IsNullOrWhiteSpace(token))
-			{
-				using HttpClient client = new();
-				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+		public string ClientID { get; set; } = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_ID") ?? "";
 
-				HttpResponseMessage response = await client.GetAsync("https://api.spotify.com/v1/me");
+		public string Secret { get; set; } = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_SECRET") ?? "";
 
-				if (response.IsSuccessStatusCode)
-				{
-					User = JsonSerializer.Deserialize<User>(await response.Content.ReadAsStringAsync()) ?? new();
-				}
-				else
-				{
-					Console.WriteLine($"Error: {await response.Content.ReadAsStringAsync()}");
-				}
-			}
+		private SpotifyClient? client = null;
 
-			return Page();
-		}
+		public async Task<SpotifyClient> GetClientAsync() => client ??= new(await HttpContext.GetTokenAsync("access_token") ?? "");
 	}
 }
