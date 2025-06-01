@@ -1,5 +1,8 @@
+using System.Collections.Specialized;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Web;
+using site.Classes;
 
 namespace site.Spotify
 {
@@ -28,7 +31,9 @@ namespace site.Spotify
 
 			async Task<JsonNode?> getResponse(string currentURL)
 			{
-				HttpResponseMessage message = await Client.GetAsync(currentURL);
+				Uri uri = new(currentURL);
+
+				HttpResponseMessage message = await Client.GetAsync(uri.ChangeQueryParameter("limit", 50));
 
 				if (await JsonSerializer.DeserializeAsync<JsonNode>(await message.Content.ReadAsStreamAsync()) is JsonNode response
 				&& response["items"] is JsonNode items)
