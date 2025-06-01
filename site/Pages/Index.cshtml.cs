@@ -16,7 +16,8 @@ namespace site.Pages
 
 		public async Task<IActionResult> OnPostOrganise()
 		{
-			Console.WriteLine((await (await GetClientAsync()).GetLikedSongsAsync()).Count());
+			string[] urls = GenreClient.GetURLs(await (await GetClientAsync()).GetLikedSongsAsync());
+
 			return new OkResult();
 		}
 	}
