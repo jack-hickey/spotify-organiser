@@ -62,6 +62,8 @@
 			<chip-framecontent>@RenderBody()</chip-framecontent>
 		</chip-frame>
 
+		<div>@Html.AntiForgeryToken()</div>
+
 		<script asp-asp-append-version="true" type="text/javascript" src="js/auxilium.min.js"></script>
 		<script asp-asp-append-version="true" type="text/javascript" src="js/site.js"></script>
 	</body>
