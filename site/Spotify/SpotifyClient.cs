@@ -11,15 +11,52 @@ namespace site.Spotify
 
 		public async Task<IEnumerable<Track>> GetLikedSongsAsync()
 		{
-			HttpResponseMessage message = await Client.GetAsync("https://api.spotify.com/v1/me/tracks");
-
-			if (await JsonSerializer.DeserializeAsync<JsonNode>(await message.Content.ReadAsStreamAsync()) is JsonNode response
-			&& response["items"] is JsonNode items)
+			if (await GetArrayResponse("https://api.spotify.com/v1/me/tracks") is JsonNode response)
 			{
-				return items.AsArray().Select(x => x?["track"].Deserialize<Track>() ?? new());
+				return response.AsArray().Select(x => x?["track"].Deserialize<Track>() ?? new());
 			}
 
 			return [];
+		}
+
+		private async Task<JsonNode> GetArrayResponse(string url)
+		{
+			JsonArray array = [];
+
+			string next = url;
+			string current = "";
+
+			async Task<JsonNode?> getResponse(string currentURL)
+			{
+				HttpResponseMessage message = await Client.GetAsync(currentURL);
+
+				if (await JsonSerializer.DeserializeAsync<JsonNode>(await message.Content.ReadAsStreamAsync()) is JsonNode response
+				&& response["items"] is JsonNode items)
+				{
+					current = next;
+					next = response["next"]?.ToString() ?? "";
+
+					return items;
+				}
+				else
+				{
+					next = "";
+					return null;
+				}
+			}
+
+			while (!string.IsNullOrWhiteSpace(next) && !next.Equals(current))
+			{
+				if (await getResponse(next) is JsonNode items)
+				{
+					foreach (JsonNode? item in items.AsArray())
+					{
+						array.Add(item?.DeepClone());
+					}
+				}
+			}
+
+			return array;
 		}
 
 		public SpotifyClient(string token)
