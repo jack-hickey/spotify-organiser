@@ -6,5 +6,12 @@ namespace site.Spotify
 	{
 		[JsonPropertyName("name")]
 		public string Name { get; set; } = "";
+
+		private string? mbRequest;
+
+		public string MbRequest => mbRequest ??= $"title:{Name} AND artist:{Artists.FirstOrDefault()?.Name ?? ""}";
+
+		[JsonPropertyName("artists")]
+		public Artist[] Artists { get; set; } = [];
 	}
 }
